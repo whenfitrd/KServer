@@ -3,8 +3,8 @@ package main
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/json"
 	"fmt"
+	"github.com/whenfitrd/KServer/utils"
 	"net"
 )
 
@@ -32,17 +32,21 @@ func main() {
 	//trimmedClient := strings.Trim(clientName, "\n")
 
 	testStruct := &Test{"test struct.", 10000}
-	testStruct1 := &Test{"test struct.", 5}
+	//testStruct1 := &Test{"test struct.", 5}
+	//
+	//d1, err := json.Marshal(testStruct)
+	//if err != nil {
+	//	fmt.Println("To JSON ERR:", err)
+	//}
+	//
+	//d2, err := json.Marshal(testStruct1)
+	//if err != nil {
+	//	fmt.Println("To JSON ERR:", err)
+	//}
 
-	d1, err := json.Marshal(testStruct)
-	if err != nil {
-		fmt.Println("To JSON ERR:", err)
-	}
+	msg := utils.PackMsg(1, testStruct)
 
-	d2, err := json.Marshal(testStruct1)
-	if err != nil {
-		fmt.Println("To JSON ERR:", err)
-	}
+	_, err = conn.Write(msg)
 
 
 	//Len := unsafe.Sizeof(*testStruct)
@@ -80,27 +84,27 @@ func main() {
 	//fmt.Println("data length  ", Len, len(data))
 	//fmt.Println("data length  ", Len, len(data1))
 
-	msgType, _ := IntToBytes(1,1)
-	headInfo := []byte("use json")
-
-	msgHead := append(msgType, headInfo...)
-
-	m2, _ := IntToBytes(int(len(d1)), 4)
-	m3, _ := IntToBytes(1, 4)
-
-	m21, _ := IntToBytes(int(len(d2)), 4)
-	m31, _ := IntToBytes(1, 4)
-
-	//m4 := []byte("test: hello ...")
-	msg := append(msgHead, m2...)
-	msg = append(msg, m3...)
-	msg = append(msg, d1...)
-
-	msg1 := append(msgHead, m21...)
-	msg1 = append(msg1, m31...)
-	msg1 = append(msg1, d2...)
-	_, err = conn.Write(msg)
-	_, err = conn.Write(msg1)
+	//msgType, _ := IntToBytes(1,1)
+	//headInfo := []byte("use json")
+	//
+	//msgHead := append(msgType, headInfo...)
+	//
+	//m2, _ := IntToBytes(int(len(d1)), 4)
+	//m3, _ := IntToBytes(1, 4)
+	//
+	//m21, _ := IntToBytes(int(len(d2)), 4)
+	//m31, _ := IntToBytes(1, 4)
+	//
+	////m4 := []byte("test: hello ...")
+	//msg := append(msgHead, m2...)
+	//msg = append(msg, m3...)
+	//msg = append(msg, d1...)
+	//
+	//msg1 := append(msgHead, m21...)
+	//msg1 = append(msg1, m31...)
+	//msg1 = append(msg1, d2...)
+	//_, err = conn.Write(msg)
+	//_, err = conn.Write(msg1)
 	//conn.Close()
 	//_, err = conn.Write([]byte("test: bye ..."))
 }

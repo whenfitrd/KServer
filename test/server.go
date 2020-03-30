@@ -3,9 +3,10 @@ package main
 import (
 	//"fmt"
 
-	"encoding/json"
 	"fmt"
-	"kserver/mnet"
+	"github.com/whenfitrd/KServer/utils"
+
+	"github.com/whenfitrd/KServer/mnet"
 )
 
 type Test struct{
@@ -45,10 +46,11 @@ func test(data []byte) {
 	//}
 	//d := *(*[]byte)(unsafe.Pointer(testBytes))
 	var s Test
-	err:=json.Unmarshal([]byte(data), &s)
-	if err!=nil{
-		fmt.Println(err)
-	}
+	//err:=json.Unmarshal([]byte(data), &s)
+	//if err!=nil{
+	//	fmt.Println(err)
+	//}
+	utils.UnPackMsg(data, &s)
 
 	//var a *Test = *(**Test)(unsafe.Pointer(&data))
 	//var tt Test = *a

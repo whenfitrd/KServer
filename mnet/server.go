@@ -1,7 +1,7 @@
 package mnet
 
 import (
-	"kserver/utils"
+	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"os"
 	"os/signal"
@@ -69,16 +69,20 @@ func (s *Server) Stop() {
 }
 
 func (s *Server) LoggerClose() {
+	//关闭log
+	if logger.Closed {
+		return
+	}
 	logger.Close<- true
 	<-logger.Clear
 }
 
 func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
-	defer utils.HandlePanic()
+	//defer utils.HandlePanic()
 
+	//添加路由处理
 	cc := &CConn{}
 	cc.Init(conn, s.Router)
-	cc.Read()
 
 	//msg := &Message{}
 	//msg.Parser(conn)
@@ -89,6 +93,7 @@ func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
 var shutdownSignals = []os.Signal{os.Interrupt, os.Kill}
 
 func (s *Server) ExitHandle() {
+	//添加Ctrl+C的捕获处理
 	logger.Info("ExitHandle")
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, shutdownSignals...)
@@ -105,10 +110,7 @@ func (s *Server) ExitHandle() {
 }
 
 func Panic2Error() (err error) {
-
-
 	//panic(-1)
-
 	return nil
 }
 

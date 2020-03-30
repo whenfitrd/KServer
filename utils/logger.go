@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -14,10 +15,12 @@ type ILog interface {
 var logger *Logger
 
 type Logger struct {
+	sync.Mutex
 	Name    string
 	MsgChan chan *LogMsg
 	Close   chan bool
 	Clear   chan bool
+	Closed  bool
 }
 
 type LogMsg struct {
@@ -35,52 +38,63 @@ func GetLogger() *Logger {
 			MsgChan: make(chan *LogMsg, 256),
 			Close: make(chan bool),
 			Clear: make(chan bool),
+			Closed: false,
 		}
 	}
 	return logger
 }
 
 func (logger *Logger) Init() {
-	go logger.PrintLog()
 	go logger.RegisterCloseHandle()
+	go logger.Start()
 }
 
 func (logger *Logger) RegisterCloseHandle() {
-	//var b bool
+	//注册一个关闭处理的方法
 	<-logger.Close
 	logger.Warn("Logger start closing...")
-	//if b {
 	for {
 		if len(logger.MsgChan) == 0 {
 			break
 		}
 		time.Sleep(100 * time.Millisecond)
 	}
+	logger.Closed = true
 	logger.Clear<- true
-	//}
 }
 
 func (logger *Logger) PutMsg(msg *LogMsg) {
+	//把msg放入缓冲池里
+	if logger.Closed {
+		return
+	}
+	logger.Lock()
 	logger.MsgChan<- msg
+	logger.Unlock()
 }
 
 func (logger *Logger) PopMsg() *LogMsg {
 	return <-logger.MsgChan
 }
 
-func (logger *Logger) PrintLog() {
+//开启log
+func (logger *Logger) Start() {
 	for {
 		msg := logger.PopMsg()
 		levelString := ""
 		switch msg.Level {
-		case 1:
+		case UNKNOWN:
+			levelString = "[unknown]"
+		case DEBUG:
+			levelString = "[debug]"
+		case INFO:
 			levelString = "[info]"
-		case 2:
+		case WARN:
 			levelString = "[warning]"
-		case 3:
+		case ERROR:
 			levelString = "[error]"
 		default:
-			levelString = "[unknow]"
+			levelString = "[unknown]"
 		}
 		log.SetPrefix(levelString)
 		loginfo := fmt.Sprintf("%s:%d %s", msg.FPath, msg.Line, msg.Msg)
@@ -93,9 +107,6 @@ func (logger *Logger) PrintLog() {
 }
 
 func (logger *Logger) Print(m string, level int, itf []interface{}) {
-	//for _, i := range itfs {
-	//	itf = append(itf, i)
-	//}
 	_, file, line, ok := runtime.Caller(2)
 	if ok {
 		msg := &LogMsg{
@@ -109,14 +120,26 @@ func (logger *Logger) Print(m string, level int, itf []interface{}) {
 	}
 }
 
+func (logger *Logger) debug(msg string, itf ...interface{}) {
+	logger.Print(msg, DEBUG, itf)
+}
+
 func (logger *Logger) Info(msg string, itf ...interface{}) {
-	logger.Print(msg, 1, itf)
+	logger.Print(msg, INFO, itf)
 }
 
 func (logger *Logger) Warn(msg string, itf ...interface{}) {
-	logger.Print(msg, 2, itf)
+	logger.Print(msg, WARN, itf)
 }
 
 func (logger *Logger) Error(msg string, itf ...interface{}) {
-	logger.Print(msg, 3, itf)
+	logger.Print(msg, ERROR, itf)
 }
+
+const (
+	UNKNOWN = iota
+	DEBUG
+	INFO
+	WARN
+	ERROR
+)

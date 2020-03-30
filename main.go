@@ -3,7 +3,7 @@ package main
 import (
 	//"fmt"
 
-	"kserver/mnet"
+	"github.com/whenfitrd/KServer/mnet"
 )
 
 func main() {

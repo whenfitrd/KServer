@@ -1,5 +1,3 @@
-module kserver
+module github.com/whenfitrd/KServer
 
 go 1.13
-
-replace kserver => ../kserver

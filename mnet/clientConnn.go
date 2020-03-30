@@ -1,8 +1,8 @@
 package mnet
 
 import (
-	"kserver/global"
-	"kserver/utils"
+	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/utils"
 	"net"
 )
 
@@ -16,6 +16,7 @@ func (cc *CConn) Init(tc *net.TCPConn, router *Router) {
 	cc.TConn = tc
 	cc.Router = router
 	cc.BufChan = make(chan []byte, 16)
+	cc.Read()
 }
 
 func (cc *CConn) Write() {}

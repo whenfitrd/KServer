@@ -2,10 +2,10 @@ package mnet
 
 import (
 	"encoding/binary"
-	"kserver/global"
-	"kserver/minterface"
-	"kserver/rStatus"
-	"kserver/utils"
+	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/minterface"
+	"github.com/whenfitrd/KServer/rStatus"
+	"github.com/whenfitrd/KServer/utils"
 	"strconv"
 	"unsafe"
 )
