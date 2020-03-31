@@ -36,7 +36,7 @@ func (msg *Message) GetMsgParser(msgType int8) minterface.Msg {
 
 func (msg *Message) ParserHead(data []byte) rStatus.RStatus {
 	utils.GetLogger().Info(string(data[1:]))
-	defer utils.HandlePanic()
+	defer utils.HandlePanic("server")
 	if string(data[1:]) == global.MMsgHead {
 		msg.MsgType = int8(data[0])
 		utils.GetLogger().Info("End to read message head. type:" + strconv.Itoa(int(msg.MsgType)))

@@ -8,19 +8,20 @@ import (
 	"net"
 )
 
-type Test struct{
+type Test struct {
 	Info string
-	L int
+	L    int
 }
 
 type SliceMock struct {
 	addr uintptr
-	len int
-	cap int
+	len  int
+	cap  int
 }
 
 func main() {
-	conn, err := net.Dial("tcp", "localhost:50000")
+	conn, err := net.Dial("tcp", "47.101.57.8:50000")
+	//conn, err := net.Dial("tcp", "localhost:50000")
 	if err != nil {
 		fmt.Println("Error dialing", err.Error())
 		return
@@ -47,8 +48,7 @@ func main() {
 	msg := utils.PackMsg(1, testStruct)
 
 	_, err = conn.Write(msg)
-
-
+	conn.Close()
 	//Len := unsafe.Sizeof(*testStruct)
 	//Len1 := unsafe.Sizeof(*testStruct)
 	//testBytes := &SliceMock{

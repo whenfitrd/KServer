@@ -1,9 +1,14 @@
 package utils
 
-import "errors"
+import (
+	"errors"
+	"github.com/satori/go.uuid"
+)
 
-func HandlePanic() (err error) {
+
+func HandlePanic(info string) (err error) {
 	if r := recover(); r != nil {
+		logger.Info(info)
 		logger.Error("Recovered in Panic2Error")
 
 		switch x := r.(type) {
@@ -16,4 +21,9 @@ func HandlePanic() (err error) {
 		}
 	}
 	return nil
+}
+
+func UniqueString() string {
+	uid := uuid.NewV4()
+	return uid.String()
 }

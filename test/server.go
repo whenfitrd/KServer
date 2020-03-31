@@ -26,7 +26,7 @@ func main() {
 	s.Start()
 }
 
-func test(data []byte) {
+func test(cc *mnet.CConn, data []byte) {
 	fmt.Printf("=================test api================\n")
 	//t := &Test{}
 	//t := Test{}
