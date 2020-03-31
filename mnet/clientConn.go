@@ -1,6 +1,7 @@
 package mnet
 
 import (
+	"github.com/whenfitrd/KServer/gObj"
 	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
@@ -10,17 +11,14 @@ import (
 type CConn struct {
 	sync.Mutex
 	TConn *net.TCPConn
-	Router *Router
 	BufChan chan []byte
 	UID string
 }
 
-func (cc *CConn) Init(tc *net.TCPConn, router *Router) {
+func (cc *CConn) Init(tc *net.TCPConn) {
 	cc.UID = utils.UniqueString()
 	cc.TConn = tc
-	cc.Router = router
 	cc.BufChan = make(chan []byte, 16)
-	cc.Read()
 }
 
 func (cc *CConn) Write(data []byte) {
@@ -58,8 +56,12 @@ func (cc *CConn) Handle() {
 		buffer = buffer[global.MsgInfoLen:]
 		msg.Parser(buffer[:msg.MsgInfo.Length])
 		logger.Info("buffer data: ", msg.MsgInfo.GetData())
-		cc.Router.Handle(cc, msg.MsgInfo.GetApiId(), msg.MsgInfo.GetData())
+		gObj.GetGObj().Router.Handle(cc, msg.MsgInfo.GetApiId(), msg.MsgInfo.GetData())
 	}
 }
 
 func (cc *CConn) Close() {}
+
+func (cc *CConn) GetUID() string {
+	return cc.UID
+}

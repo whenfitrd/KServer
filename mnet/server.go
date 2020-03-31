@@ -1,6 +1,8 @@
 package mnet
 
 import (
+	"github.com/whenfitrd/KServer/gObj"
+	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"os"
@@ -11,17 +13,16 @@ type Server struct {
 	Name string
 	Ip   string
 	Port string
-	Router *Router
 }
 
 var logger *utils.Logger
+var gObject *gObj.GlobalObj
 
 func ApplyServer(name, ip, port string) *Server {
 	s := &Server{
 		Name: name,
 		Ip:   ip,
 		Port: port,
-		Router: &Router{},
 	}
 
 	s.Init()
@@ -30,12 +31,13 @@ func ApplyServer(name, ip, port string) *Server {
 }
 
 func (s *Server) Init() {
-	s.Router.Init()
+	logger = utils.GetLogger()
+	logger.Init()
+	gObject = gObj.GetGObj()
+	gObject.Init(GetNetGroupManager(), GetRouter())
 }
 
 func (s *Server) Start() {
-	logger = utils.GetLogger()
-	logger.Init()
 	logger.Info("Starting the server ...")
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp", s.Ip+":"+s.Port)
@@ -82,7 +84,8 @@ func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
 
 	//添加路由处理
 	cc := &CConn{}
-	cc.Init(conn, s.Router)
+	cc.Init(conn)
+	cc.Read()
 
 	//msg := &Message{}
 	//msg.Parser(conn)
@@ -112,6 +115,10 @@ func (s *Server) ExitHandle() {
 func Panic2Error() (err error) {
 	//panic(-1)
 	return nil
+}
+
+func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc) {
+	gObj.GetGObj().Router.GetHandleMap()[int(apiId)] = handle
 }
 
 

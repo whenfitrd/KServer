@@ -4,8 +4,8 @@ import (
 	//"fmt"
 
 	"fmt"
+	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/utils"
-
 	"github.com/whenfitrd/KServer/mnet"
 )
 
@@ -22,11 +22,11 @@ type Test struct{
 
 func main() {
 	s := mnet.ApplyServer("testServer", "localhost", "50000")
-	s.Router.AddRouter(1, test)
+	s.AddRouter(1, test)
 	s.Start()
 }
 
-func test(cc *mnet.CConn, data []byte) {
+func test(cc minterface.ICConn, data []byte) {
 	fmt.Printf("=================test api================\n")
 	//t := &Test{}
 	//t := Test{}
