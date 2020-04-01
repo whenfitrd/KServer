@@ -69,8 +69,8 @@ func (logger *Logger) PutMsg(msg *LogMsg) {
 		return
 	}
 	logger.Lock()
+	defer logger.Unlock()
 	logger.MsgChan<- msg
-	logger.Unlock()
 }
 
 func (logger *Logger) PopMsg() *LogMsg {

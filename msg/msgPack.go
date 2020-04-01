@@ -1,4 +1,4 @@
-package utils
+package msg
 
 import (
 	"bytes"
@@ -29,11 +29,14 @@ func PackMsg(apiId int, data interface{}) []byte {
 	return msg
 }
 
-func UnPackMsg(data []byte, s interface{}) {
-	err:=json.Unmarshal([]byte(data), s)
-	if err!=nil{
-		fmt.Println(err)
-	}
+func UnPackMsg(buffer []byte) *Message {
+	msg := &Message{}
+	msg.ParserHead(buffer[:global.MyMsgLen])
+	buffer = buffer[global.MyMsgLen:]
+	msg.MsgInfo = msg.ParserDataInfo(buffer[:global.MsgInfoLen]).(*MMsg)
+	buffer = buffer[global.MsgInfoLen:]
+	msg.Parser(buffer[:msg.MsgInfo.Length])
+	return msg
 }
 
 func IntToBytes(n int, b byte) ([]byte, error) {

@@ -3,6 +3,7 @@ package mnet
 import (
 	"github.com/whenfitrd/KServer/gObj"
 	"github.com/whenfitrd/KServer/minterface"
+	"github.com/whenfitrd/KServer/rStatus"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"os"
@@ -117,8 +118,20 @@ func Panic2Error() (err error) {
 	return nil
 }
 
-func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc) {
+func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
 	gObj.GetGObj().Router.GetHandleMap()[int(apiId)] = handle
+}
+
+func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {
+	group, sts := gObj.GetGObj().NetGroupManager.FindNetGroup(groupName)
+	if sts == rStatus.StatusOK {
+		for _, conns := range group {
+			conns.Write(data)
+		}
+		return rStatus.StatusOK
+	} else {
+		return rStatus.StatusError
+	}
 }
 
 

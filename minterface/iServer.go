@@ -1,6 +1,9 @@
 package minterface
 
-import "net"
+import (
+	"github.com/whenfitrd/KServer/rStatus"
+	"net"
+)
 
 type IServer interface {
 	Init()
@@ -16,4 +19,6 @@ type IServer interface {
 	ExitHandle()
 
 	AddRouter(apiId int32, handle HandleFunc)
+
+	WriteToGroup(data []byte, groupName string) rStatus.RInfo
 }
