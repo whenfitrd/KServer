@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
-	s := mnet.ApplyServer("testServer", "localhost", "50000")
+	s := mnet.ApplyServer()
+	//s.SConfig("testServer", "0.0.0.0", "50000")
+	s.LoadIni("config.ini")
 	s.Start()
 }

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/whenfitrd/KServer/msg"
+	"github.com/whenfitrd/KServer/utils"
 	"net"
 )
 
@@ -29,7 +29,7 @@ func main() {
 
 	testStruct := &Test{"test struct.", 10000}
 
-	m := msg.PackMsg(1, testStruct)
+	m := utils.PackMsg(1, testStruct)
 
 	_, err = conn.Write(m)
 	conn.Close()

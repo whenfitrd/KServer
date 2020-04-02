@@ -1,4 +1,4 @@
-package msg
+package utils
 
 import (
 	"bytes"
@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/minterface"
 )
 
 func PackMsg(apiId int, data interface{}) []byte {
@@ -29,13 +30,12 @@ func PackMsg(apiId int, data interface{}) []byte {
 	return msg
 }
 
-func UnPackMsg(buffer []byte) *Message {
-	msg := &Message{}
+func UnPackMsg(buffer []byte, msg minterface.IMsg) minterface.IMsg {
 	msg.ParserHead(buffer[:global.MyMsgLen])
 	buffer = buffer[global.MyMsgLen:]
-	msg.MsgInfo = msg.ParserDataInfo(buffer[:global.MsgInfoLen]).(*MMsg)
+	msg.ParserDataInfo(buffer[:global.MsgInfoLen])
 	buffer = buffer[global.MsgInfoLen:]
-	msg.Parser(buffer[:msg.MsgInfo.Length])
+	msg.Parser(buffer[:msg.GetMsgInfo().GetLength()])
 	return msg
 }
 

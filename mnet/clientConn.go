@@ -1,8 +1,6 @@
 package mnet
 
 import (
-	"github.com/whenfitrd/KServer/gObj"
-	"github.com/whenfitrd/KServer/msg"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"sync"
@@ -50,8 +48,8 @@ func (cc *CConn) Handle() {
 		buf := <-cc.BufChan
 		buffer := buf
 		logger.Info("buffer len: ", len(buffer))
-		m := msg.UnPackMsg(buffer)
-		gObj.GetGObj().Router.Handle(cc, m.MsgInfo.GetApiId(), m.MsgInfo.GetData())
+		m := utils.UnPackMsg(buffer, &Message{})
+		r.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
 	}
 }
 

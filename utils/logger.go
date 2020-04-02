@@ -2,7 +2,10 @@ package utils
 
 import (
 	"fmt"
+	"github.com/whenfitrd/KServer/global"
+	"io"
 	"log"
+	"os"
 	"runtime"
 	"sync"
 	"time"
@@ -45,6 +48,17 @@ func GetLogger() *Logger {
 }
 
 func (logger *Logger) Init() {
+	g := global.GetGObj()
+	if g.IniFile != nil {
+		filePath := g.IniFile.Section("").Key("logFile").Value()
+		if filePath != "" {
+			logFile, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
+			if err == nil {
+				log.SetOutput(io.MultiWriter(os.Stderr,logFile))
+			}
+		}
+	}
+
 	go logger.RegisterCloseHandle()
 	go logger.Start()
 }

@@ -1,6 +1,22 @@
 package minterface
 
-type Msg interface {
+import "github.com/whenfitrd/KServer/rStatus"
+
+type IMsg interface {
+	GetType() int8
+
+	GetMsgParser(msgType int8) IMMsg
+
+	GetMsgInfo() IMMsg
+
+	ParserHead(data []byte) rStatus.RStatus
+
+	ParserDataInfo(data []byte)
+
+	Parser(data []byte)
+}
+
+type IMMsg interface {
 	//获取数据长度
 	GetLength() int32
 	//获取APIID

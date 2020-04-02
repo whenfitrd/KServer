@@ -7,7 +7,7 @@ import (
 
 var netGroupManager *NetGroupManager
 
-func GetNetGroupManager() *NetGroupManager {
+func getNetGroupManager() *NetGroupManager {
 	if netGroupManager == nil {
 		netGroupManager = &NetGroupManager{
 			NetGroups: make(map[string]*NetGroup),

@@ -1,10 +1,9 @@
 package mnet
 
 import (
-	"github.com/whenfitrd/KServer/gObj"
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/rStatus"
-	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"os"
 	"os/signal"
@@ -16,29 +15,36 @@ type Server struct {
 	Port string
 }
 
-var logger *utils.Logger
-var gObject *gObj.GlobalObj
-
-func ApplyServer(name, ip, port string) *Server {
+func ApplyServer() *Server {
+	//默认值
 	s := &Server{
-		Name: name,
-		Ip:   ip,
-		Port: port,
+		Name: "testServer",
+		Ip:   "localhost",
+		Port: "50000",
 	}
-
-	s.Init()
 
 	return s
 }
 
+func (s *Server) SConfig(name, ip, port string) {
+	s.Name = name
+	s.Ip = ip
+	s.Port = port
+}
+
+func (s *Server) LoadIni(fileName string) {
+	iniFile, sts := global.LoadIniFile(fileName)
+	if sts == rStatus.StatusOK {
+		g.SetIniFile(iniFile)
+	}
+}
+
 func (s *Server) Init() {
-	logger = utils.GetLogger()
 	logger.Init()
-	gObject = gObj.GetGObj()
-	gObject.Init(GetNetGroupManager(), GetRouter())
 }
 
 func (s *Server) Start() {
+	s.Init()
 	logger.Info("Starting the server ...")
 
 	tcpAddr, err := net.ResolveTCPAddr("tcp", s.Ip+":"+s.Port)
@@ -119,11 +125,11 @@ func Panic2Error() (err error) {
 }
 
 func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
-	gObj.GetGObj().Router.GetHandleMap()[int(apiId)] = handle
+	r.GetHandleMap()[int(apiId)] = handle
 }
 
 func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {
-	group, sts := gObj.GetGObj().NetGroupManager.FindNetGroup(groupName)
+	group, sts := ngm.FindNetGroup(groupName)
 	if sts == rStatus.StatusOK {
 		for _, conns := range group {
 			conns.Write(data)
