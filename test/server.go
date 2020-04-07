@@ -13,7 +13,7 @@ type Test struct{
 }
 
 func main() {
-	s := mnet.ApplyServer("testServer", "localhost", "50000")
+	s := mnet.ApplyServer()
 	s.AddRouter(1, test)
 	s.Start()
 }

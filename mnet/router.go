@@ -4,7 +4,7 @@ import "github.com/whenfitrd/KServer/minterface"
 
 var router *Router
 
-func getRouter() *Router {
+func GetRouter() *Router {
 	if router == nil {
 		router = &Router{
 			HandleMap: make(map[int]minterface.HandleFunc),

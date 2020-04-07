@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/rStatus"
 	"io"
 	"log"
 	"os"
@@ -48,9 +48,16 @@ func GetLogger() *Logger {
 }
 
 func (logger *Logger) Init() {
-	g := global.GetGObj()
-	if g.IniFile != nil {
-		filePath := g.IniFile.Section("").Key("logFile").Value()
+	go logger.RegisterCloseHandle()
+	go logger.Start()
+}
+
+func (logger *Logger) SetLogFile() {
+	if iniParser != nil {
+		filePath, rst := iniParser.GetValue("base", "logFile")
+		if rst != rStatus.StatusOK {
+			filePath = "config.ini"
+		}
 		if filePath != "" {
 			logFile, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND,0666)
 			if err == nil {
@@ -58,9 +65,6 @@ func (logger *Logger) Init() {
 			}
 		}
 	}
-
-	go logger.RegisterCloseHandle()
-	go logger.Start()
 }
 
 func (logger *Logger) RegisterCloseHandle() {

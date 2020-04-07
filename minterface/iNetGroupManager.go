@@ -3,6 +3,8 @@ package minterface
 import "github.com/whenfitrd/KServer/rStatus"
 
 type INetGroupManager interface {
+	//创建网络组
+	CreateNetGroup(groupName string) rStatus.RInfo
 	//添加网络组
 	AddNetGroup(ccon ICConn, groupName string) rStatus.RInfo
 	//删除网络组

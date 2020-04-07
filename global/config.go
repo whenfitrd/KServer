@@ -12,3 +12,9 @@ const (
 const (
 	MMsgHead = "use json"
 )
+
+//游戏组权限
+const (
+	Admin = 1 + iota
+	Member
+)

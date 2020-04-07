@@ -1,7 +1,6 @@
 package mnet
 
 import (
-	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/rStatus"
 	"net"
@@ -32,15 +31,18 @@ func (s *Server) SConfig(name, ip, port string) {
 	s.Port = port
 }
 
-func (s *Server) LoadIni(fileName string) {
-	iniFile, sts := global.LoadIniFile(fileName)
-	if sts == rStatus.StatusOK {
-		g.SetIniFile(iniFile)
+func (s *Server) LoadIni(fileName string) rStatus.RInfo {
+	sts := ini.Load(fileName)
+	if sts != rStatus.StatusOK {
+		return rStatus.StatusError
 	}
+	logger.SetLogFile()
+	return rStatus.StatusOK
 }
 
 func (s *Server) Init() {
 	logger.Init()
+	s.LoadIni("config.ini")
 }
 
 func (s *Server) Start() {

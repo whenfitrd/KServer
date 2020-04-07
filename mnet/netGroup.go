@@ -7,7 +7,7 @@ import (
 
 var netGroupManager *NetGroupManager
 
-func getNetGroupManager() *NetGroupManager {
+func GetNetGroupManager() *NetGroupManager {
 	if netGroupManager == nil {
 		netGroupManager = &NetGroupManager{
 			NetGroups: make(map[string]*NetGroup),
@@ -25,6 +25,15 @@ type NetGroupManager struct {
 type NetGroup struct {
 	Name string
 	CCons map[string]minterface.ICConn
+}
+
+//创建网络组
+func (ngm *NetGroupManager)CreateNetGroup(groupName string) rStatus.RInfo {
+	ngm.NetGroups[groupName] = &NetGroup{
+		Name: groupName,
+		CCons: make(map[string]minterface.ICConn),
+	}
+	return rStatus.StatusOK
 }
 
 //添加链接至网络组
@@ -82,4 +91,3 @@ func (ngm *NetGroupManager)LeaveNetGroup(ccon minterface.ICConn, groupName strin
 		return rStatus.StatusError
 	}
 }
-
