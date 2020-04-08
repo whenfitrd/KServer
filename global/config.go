@@ -18,3 +18,10 @@ const (
 	Admin = 1 + iota
 	Member
 )
+
+//路由权限
+const (
+	RAdmin = 1 + iota
+	RMember
+	RVisitor
+)

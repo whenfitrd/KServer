@@ -1,6 +1,7 @@
 package mnet
 
 import (
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"sync"
@@ -11,12 +12,14 @@ type CConn struct {
 	TConn *net.TCPConn
 	BufChan chan []byte
 	UID string
+	Authorization int
 }
 
 func (cc *CConn) Init(tc *net.TCPConn) {
 	cc.UID = utils.UniqueString()
 	cc.TConn = tc
 	cc.BufChan = make(chan []byte, 16)
+	cc.Authorization = global.RVisitor
 }
 
 func (cc *CConn) Write(data []byte) {
@@ -59,4 +62,12 @@ func (cc *CConn) Close() {
 
 func (cc *CConn) GetUID() string {
 	return cc.UID
+}
+
+func (cc *CConn) UpdateAuth(auth int) {
+	cc.Authorization = auth
+}
+
+func (cc *CConn) GetAuth() int {
+	return cc.Authorization
 }

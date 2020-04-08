@@ -33,7 +33,7 @@ func (ngm *NetGroupManager)CreateNetGroup(groupName string) rStatus.RInfo {
 		Name: groupName,
 		CCons: make(map[string]minterface.ICConn),
 	}
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 //添加链接至网络组
@@ -54,7 +54,7 @@ func (ngm *NetGroupManager)AddNetGroup(ccon minterface.ICConn, groupName string)
 			ng.CCons[ccon.GetUID()] = ccon
 		}
 	}
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 //删除网络组
@@ -62,7 +62,7 @@ func (ngm *NetGroupManager)DeleteNetGroup(groupName string) rStatus.RInfo {
 	_, ok := ngm.NetGroups[groupName]
 	if ok {
 		delete(ngm.NetGroups, groupName)
-		return rStatus.StatusOK
+		return rStatus.StatusOk
 	} else {
 		logger.Error("The group %s is not exist", groupName)
 		return rStatus.StatusError
@@ -73,7 +73,7 @@ func (ngm *NetGroupManager)DeleteNetGroup(groupName string) rStatus.RInfo {
 func (ngm *NetGroupManager)FindNetGroup(groupName string) (map[string]minterface.ICConn, rStatus.RInfo) {
 	ng, ok := ngm.NetGroups[groupName]
 	if ok {
-		return ng.CCons, rStatus.StatusOK
+		return ng.CCons, rStatus.StatusOk
 	} else {
 		logger.Error("The group %s is not exist", groupName)
 		return nil, rStatus.StatusError
@@ -85,7 +85,7 @@ func (ngm *NetGroupManager)LeaveNetGroup(ccon minterface.ICConn, groupName strin
 	ng, ok := ngm.NetGroups[groupName]
 	if ok {
 		delete(ng.CCons, ccon.GetUID())
-		return rStatus.StatusOK
+		return rStatus.StatusOk
 	} else {
 		logger.Error("The group %s is not exist", groupName)
 		return rStatus.StatusError

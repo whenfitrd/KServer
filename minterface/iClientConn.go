@@ -13,6 +13,10 @@ type ICConn interface {
 	Handle()
 	//关闭链接
 	Close()
-
+	//获取UUID
 	GetUID() string
+	//更新权限
+	UpdateAuth(auth int)
+	//获取权限
+	GetAuth() int
 }

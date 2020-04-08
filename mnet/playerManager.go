@@ -28,19 +28,19 @@ func (pm *PlayerManager)CreatePlayer(playerName string, cc minterface.ICConn) rS
 	p := &Player{}
 	p.Init(playerName, cc)
 	pm.PlayerList[p.GetName()] = p
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (pm *PlayerManager)DeletePlayer(playerName string) rStatus.RInfo {
 	delete(pm.PlayerList, playerName)
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (pm *PlayerManager)UpdatePlayer(player minterface.IPlayer) rStatus.RInfo {
 	pm.Lock()
 	defer pm.Unlock()
 	_, rst := pm.FindPlayer(player.GetName())
-	if rst != rStatus.StatusOK {
+	if rst != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 	pm.PlayerList[player.GetName()] = player
@@ -50,7 +50,7 @@ func (pm *PlayerManager)UpdatePlayer(player minterface.IPlayer) rStatus.RInfo {
 func (pm *PlayerManager)FindPlayer(playerName string) (minterface.IPlayer, rStatus.RInfo) {
 	p, rst := pm.PlayerList[playerName]
 	if rst {
-		return p, rStatus.StatusOK
+		return p, rStatus.StatusOk
 	}
 	return nil, rStatus.StatusError
 }

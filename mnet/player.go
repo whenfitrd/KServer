@@ -19,34 +19,34 @@ func (p *Player)Init(playerName string, cc minterface.ICConn) rStatus.RInfo {
 	p.Name = playerName
 	p.GroupNames = make(map[string]int)
 	p.PConn = cc
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (p *Player)CreateGroup(groupName string) rStatus.RInfo {
 	rst := ngm.CreateNetGroup(groupName)
-	if rst != rStatus.StatusOK {
+	if rst != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 	p.GroupNames[groupName] = global.Admin
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (p *Player)AddToGroup(groupName string) rStatus.RInfo {
 	rst := ngm.AddNetGroup(p.PConn, groupName)
-	if rst != rStatus.StatusOK {
+	if rst != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 	p.GroupNames[groupName] = global.Member
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (p *Player)LeaveNetGroup(groupName string) rStatus.RInfo {
 	rst := ngm.LeaveNetGroup(p.PConn, groupName)
-	if rst != rStatus.StatusOK {
+	if rst != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 	delete(p.GroupNames, groupName)
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (p *Player)KickOutPlayer(playerName, groupName string) rStatus.RInfo {
@@ -56,16 +56,16 @@ func (p *Player)KickOutPlayer(playerName, groupName string) rStatus.RInfo {
 	}
 	if auth == global.Admin {
 		player, rst := pm.FindPlayer(playerName)
-		if rst != rStatus.StatusOK {
+		if rst != rStatus.StatusOk {
 			return rStatus.StatusError
 		}
 		rst = player.LeaveNetGroup(groupName)
-		if rst != rStatus.StatusOK {
+		if rst != rStatus.StatusOk {
 			return rStatus.StatusError
 		}
-		return rStatus.StatusOK
+		return rStatus.StatusOk
 	} else {
-		return rStatus.StatusOK
+		return rStatus.StatusOk
 	}
 }
 
@@ -75,11 +75,11 @@ func (p *Player)Exit() rStatus.RInfo {
 	}
 
 	rst := pm.DeletePlayer(p.GetName())
-	if rst != rStatus.StatusOK {
+	if rst != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (p *Player)GetName() string {

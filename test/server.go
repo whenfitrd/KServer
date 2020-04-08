@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/mnet"
 )
@@ -14,7 +15,7 @@ type Test struct{
 
 func main() {
 	s := mnet.ApplyServer()
-	s.AddRouter(1, test)
+	s.AddRouter(1, []int{global.RVisitor}, test)
 	s.Start()
 }
 

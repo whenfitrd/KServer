@@ -57,7 +57,7 @@ func (ini *IniParser)Load(fileName string) rStatus.RInfo {
 			ini.IniMap[tag][line[:cidx]] = line[cidx+1:]
 		}
 	}
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (ini *IniParser)GetValue(tag, name string) (string, rStatus.RInfo) {
@@ -69,5 +69,5 @@ func (ini *IniParser)GetValue(tag, name string) (string, rStatus.RInfo) {
 	if !ok {
 		return "", rStatus.StatusError
 	}
-	return v, rStatus.StatusOK
+	return v, rStatus.StatusOk
 }

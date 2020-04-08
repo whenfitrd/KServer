@@ -42,3 +42,74 @@
 [info]2020/04/07 18:22:31 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
 [info]2020/04/07 18:22:35 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
 [warning]2020/04/07 18:22:35 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:38:09 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:38:09 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[error]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:47972  connection error:  EOF
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:38:16 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[info]2020/04/08 10:38:20 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:38:20 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:38:32 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:38:32 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[error]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:48110  connection error:  EOF
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:38:34 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[info]2020/04/08 10:38:40 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:38:40 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:41:14 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:41:14 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[error]2020/04/08 10:41:18 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:49422  connection error:  EOF
+[info]2020/04/08 10:41:34 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:41:34 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:42:57 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:42:57 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[error]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:50244  connection error:  EOF
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[info]2020/04/08 10:42:59 /home/kangyao/KServer/mnet/router.go:36  [3]
+[info]2020/04/08 10:43:09 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:43:09 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:46:28 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:46:28 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[error]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:51920  connection error:  EOF
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/router.go:36  [3]
+[info]2020/04/08 10:46:30 /home/kangyao/KServer/mnet/router.go:38  0 3
+[info]2020/04/08 10:46:41 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:46:41 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...
+[info]2020/04/08 10:47:04 /home/kangyao/KServer/mnet/server.go:50 Starting the server ...
+[info]2020/04/08 10:47:04 /home/kangyao/KServer/mnet/server.go:109 ExitHandle
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/clientConn.go:53 buffer len:  1024
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/msg.go:42 use json
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/msg.go:46 End to read message head. type:1
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/msg.go:83 End to read message length. 33
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/msg.go:87 End to read message api id. 1
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/msg.go:92 End to read message data length. 33
+[error]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/clientConn.go:41 127.0.0.1:52234  connection error:  EOF
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/router.go:36  [3]
+[info]2020/04/08 10:47:07 /home/kangyao/KServer/mnet/router.go:38  3 3
+[info]2020/04/08 10:47:10 /home/kangyao/KServer/mnet/server.go:114 Server closing ...
+[warning]2020/04/08 10:47:10 /home/kangyao/KServer/utils/logger.go:73 Logger start closing...

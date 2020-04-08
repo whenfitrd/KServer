@@ -12,5 +12,6 @@ const (
 	Error
 )
 
-var StatusOK = RInfo{Ok, "Ok"}
+var StatusOk = RInfo{Ok, "Ok"}
 var StatusError = RInfo{Error, "Error"}
+var ApiAuthError = RInfo{Ok, "Api Authorization Error."}

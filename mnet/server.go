@@ -33,11 +33,11 @@ func (s *Server) SConfig(name, ip, port string) {
 
 func (s *Server) LoadIni(fileName string) rStatus.RInfo {
 	sts := ini.Load(fileName)
-	if sts != rStatus.StatusOK {
+	if sts != rStatus.StatusOk {
 		return rStatus.StatusError
 	}
 	logger.SetLogFile()
-	return rStatus.StatusOK
+	return rStatus.StatusOk
 }
 
 func (s *Server) Init() {
@@ -126,17 +126,17 @@ func Panic2Error() (err error) {
 	return nil
 }
 
-func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
-	r.GetHandleMap()[int(apiId)] = handle
+func (s *Server) AddRouter(apiId int32, auth []int, handle minterface.HandleFunc)  {
+	r.AddRouter(apiId, auth, handle)
 }
 
 func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {
 	group, sts := ngm.FindNetGroup(groupName)
-	if sts == rStatus.StatusOK {
+	if sts == rStatus.StatusOk {
 		for _, conns := range group {
 			conns.Write(data)
 		}
-		return rStatus.StatusOK
+		return rStatus.StatusOk
 	} else {
 		return rStatus.StatusError
 	}
