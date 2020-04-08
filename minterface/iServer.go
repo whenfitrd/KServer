@@ -18,7 +18,7 @@ type IServer interface {
 
 	ExitHandle()
 
-	SetAuth(auth []int)
+	SetAuth(auth int)
 
 	AddRouter(apiId int32, handle HandleFunc)
 

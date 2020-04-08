@@ -12,7 +12,7 @@ func GetRouter() *Router {
 	if router == nil {
 		router = &Router{
 			HandleMap: make(map[int]*minterface.Function),
-			Auth: []int{global.RAdmin, global.RMember, global.RVisitor},
+			Auth: global.RAll,
 		}
 	}
 	return router
@@ -20,10 +20,10 @@ func GetRouter() *Router {
 
 type Router struct {
 	HandleMap map[int]*minterface.Function
-	Auth []int
+	Auth int
 }
 
-func (router *Router) SetAuth(auth []int) {
+func (router *Router) SetAuth(auth int) {
 	router.Auth = auth
 }
 
@@ -41,11 +41,9 @@ func (router *Router) Handle(cc minterface.ICConn, apiId int32, data []byte) rSt
 		return rStatus.StatusError
 	}
 	//简单的接口权限检测
-	for _, i := range f.Auth {
-		if i == cc.GetAuth() {
-			f.Func(cc, data)
-			return rStatus.StatusOk
-		}
+	if CheckAuth(cc.GetAuth(), f.Auth) {
+		f.Func(cc, data)
+		return rStatus.StatusOk
 	}
 	return rStatus.ApiAuthError
 }

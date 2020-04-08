@@ -21,7 +21,8 @@ const (
 
 //路由权限
 const (
-	RAdmin = 1 + iota
-	RMember
-	RVisitor
+	RVisitor = 1
+	RMember = 2
+	RAdmin = 4
+	RAll = 7
 )

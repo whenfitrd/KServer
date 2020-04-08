@@ -126,7 +126,7 @@ func Panic2Error() (err error) {
 	return nil
 }
 
-func (s *Server) SetAuth(auth []int) {
+func (s *Server) SetAuth(auth int) {
 	r.SetAuth(auth)
 }
 

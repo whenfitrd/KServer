@@ -15,7 +15,7 @@ type Test struct{
 
 func main() {
 	s := mnet.ApplyServer()
-	s.SetAuth([]int{global.RVisitor})
+	s.SetAuth(global.RVisitor)
 	s.AddRouter(1, test)
 	s.Start()
 }

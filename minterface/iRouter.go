@@ -6,12 +6,12 @@ type HandleFunc func(ICConn, []byte)
 
 type Function struct {
 	Func HandleFunc
-	Auth []int
+	Auth int
 }
 
 type IRouter interface {
 	//设置即将注册的路由权限
-	SetAuth(auth []int)
+	SetAuth(auth int)
 	//注册路由
 	AddRouter(apiId int32, handle HandleFunc)
 	//路由处理
