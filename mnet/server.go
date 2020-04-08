@@ -126,8 +126,12 @@ func Panic2Error() (err error) {
 	return nil
 }
 
-func (s *Server) AddRouter(apiId int32, auth []int, handle minterface.HandleFunc)  {
-	r.AddRouter(apiId, auth, handle)
+func (s *Server) SetAuth(auth []int) {
+	r.SetAuth(auth)
+}
+
+func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
+	r.AddRouter(apiId, handle)
 }
 
 func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {

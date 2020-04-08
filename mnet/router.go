@@ -1,6 +1,7 @@
 package mnet
 
 import (
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/rStatus"
 )
@@ -11,6 +12,7 @@ func GetRouter() *Router {
 	if router == nil {
 		router = &Router{
 			HandleMap: make(map[int]*minterface.Function),
+			Auth: []int{global.RAdmin, global.RMember, global.RVisitor},
 		}
 	}
 	return router
@@ -18,12 +20,17 @@ func GetRouter() *Router {
 
 type Router struct {
 	HandleMap map[int]*minterface.Function
+	Auth []int
 }
 
-func (router *Router) AddRouter(apiId int32, auth []int, handle minterface.HandleFunc) {
+func (router *Router) SetAuth(auth []int) {
+	router.Auth = auth
+}
+
+func (router *Router) AddRouter(apiId int32, handle minterface.HandleFunc) {
 	router.HandleMap[int(apiId)] = &minterface.Function{
 		Func: handle,
-		Auth: auth,
+		Auth: router.Auth,
 	}
 }
 
