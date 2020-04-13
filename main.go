@@ -1,15 +1,31 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/mManager"
+	"github.com/whenfitrd/KServer/minterface"
 )
 
-func main() {
-	//s := mnet.ApplyServer()
-	////s.SConfig("testServer", "0.0.0.0", "50000")
-	//s.Start()
-	//s.LoadIni("config.ini")
+type Test struct{
+	Info string
+	L int
+}
 
+func main() {
 	mgr := mManager.ApplyManager()
+	mgr.AddRouter(global.LoginModule, 1, test, global.RAll)
 	mgr.Start()
+}
+
+func test(cc minterface.ICConn, data []byte) {
+	var s Test
+
+	err:=json.Unmarshal([]byte(data), &s)
+	if err!=nil{
+		fmt.Println(err)
+	}
+
+	fmt.Println("=================test api======", s.Info, s.L)
 }

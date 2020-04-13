@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/mManager"
 	"github.com/whenfitrd/KServer/minterface"
-	"github.com/whenfitrd/KServer/mnet"
 )
 
 type Test struct{
@@ -14,10 +14,9 @@ type Test struct{
 }
 
 func main() {
-	s := mnet.ApplyServer()
-	s.SetAuth(global.RVisitor)
-	s.AddRouter(1, test)
-	s.Start()
+	mgr := mManager.ApplyManager()
+	mgr.AddRouter(global.LoginModule, 1, test, global.RAll)
+	mgr.Start()
 }
 
 func test(cc minterface.ICConn, data []byte) {

@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/whenfitrd/KServer/mStruct"
+	"github.com/whenfitrd/KServer/mManager"
 	"net/rpc"
 	"os"
 	"strings"
@@ -36,11 +36,11 @@ func main() {
 
 		if len(cmdStr) == 0 {
 		} else {
-			args := mStruct.Args{
+			args := mManager.Args{
 				Cmd:    cmdStr[0],
 				Params: cmdStr[1:],
 			}
-			replay := mStruct.Reply{}
+			replay := mManager.Reply{}
 			err := client.Call("Cmd.RpcReplay", args, &replay)
 			if err != nil {
 				fmt.Println("Cmd error:", err)

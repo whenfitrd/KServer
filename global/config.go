@@ -26,3 +26,8 @@ const (
 	RAdmin = 4
 	RAll = 7
 )
+
+//模块
+const (
+	LoginModule = 1 + iota
+)

@@ -54,6 +54,9 @@ func (ini *IniParser)Load(fileName string) rStatus.RInfo {
 			ini.IniMap[tag] = make(map[string]string)
 		} else if lidx < 0 && ridx < 0  {
 			cidx := strings.Index(line, "=")
+			if cidx == -1 {
+				return rStatus.StatusOk
+			}
 			ini.IniMap[tag][line[:cidx]] = line[cidx+1:]
 		}
 	}

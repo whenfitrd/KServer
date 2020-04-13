@@ -6,21 +6,19 @@ import (
 )
 
 type IServer interface {
+	SConfig(name, ip, port string)
+
 	Init()
 
 	Start()
 
 	Stop()
 
-	LoggerClose()
+	AcceptConnect()
 
 	ConnectHandle(conn *net.TCPConn) (err error)
 
-	ExitHandle()
-
-	SetAuth(auth int)
-
-	AddRouter(apiId int32, handle HandleFunc)
+	AddRouter(apiId int32, handle *Function)
 
 	WriteToGroup(data []byte, groupName string) rStatus.RInfo
 }

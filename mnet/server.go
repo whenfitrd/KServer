@@ -1,17 +1,20 @@
 package mnet
 
 import (
+	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/rStatus"
 	"net"
-	"os"
-	"os/signal"
+	"sync"
 )
 
 type Server struct {
 	Name string
 	Ip   string
 	Port string
+	Router minterface.IRouter
+	serverChan chan bool
+	wg sync.WaitGroup
 }
 
 func ApplyServer() *Server {
@@ -20,8 +23,12 @@ func ApplyServer() *Server {
 		Name: "testServer",
 		Ip:   "localhost",
 		Port: "50000",
+		Router: &Router{},
+		serverChan: make(chan bool),
+		wg: sync.WaitGroup{},
 	}
 
+	s.Init()
 	return s
 }
 
@@ -31,24 +38,26 @@ func (s *Server) SConfig(name, ip, port string) {
 	s.Port = port
 }
 
-func (s *Server) LoadIni(fileName string) rStatus.RInfo {
-	sts := ini.Load(fileName)
-	if sts != rStatus.StatusOk {
-		return rStatus.StatusError
-	}
-	logger.SetLogFile()
-	return rStatus.StatusOk
-}
-
 func (s *Server) Init() {
-	logger.Init()
-	s.LoadIni("config.ini")
+	//初始化路由
+	s.Router = &Router{
+		HandleMap: make(map[int]*minterface.Function),
+		Auth: global.RAll,
+	}
 }
 
 func (s *Server) Start() {
-	s.Init()
 	logger.Info("Starting the server ...")
 
+	go s.AcceptConnect()
+}
+
+func (s *Server) Stop() {
+	logger.Info("Stop server...")
+	s.serverChan <- true
+}
+
+func (s *Server) AcceptConnect() {
 	tcpAddr, err := net.ResolveTCPAddr("tcp", s.Ip+":"+s.Port)
 	if err != nil {
 		logger.Error("Error ip, err: " + err.Error())
@@ -60,9 +69,13 @@ func (s *Server) Start() {
 		return
 	}
 
-	//Panic2Error()
-
-	s.ExitHandle()
+	go func() {
+		<-s.serverChan
+		logger.Warn("Stop listener ...")
+		if err = listener.Close(); err != nil {
+			logger.Error(err.Error())
+		}
+	}()
 
 	for {
 		conn, err := listener.AcceptTCP()
@@ -70,31 +83,20 @@ func (s *Server) Start() {
 			logger.Error("Error accepting, err: " + err.Error())
 			return
 		}
+		s.wg.Add(1)
 		go s.ConnectHandle(conn)
 	}
 }
 
-func (s *Server) Stop() {
-	s.LoggerClose()
-	os.Exit(1)
-}
-
-func (s *Server) LoggerClose() {
-	//关闭log
-	if logger.Closed {
-		return
-	}
-	logger.Close<- true
-	<-logger.Clear
-}
-
 func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
+	defer s.wg.Done()
+	defer conn.Close()
 	//defer utils.HandlePanic()
 
 	//添加路由处理
 	cc := &CConn{}
 	cc.Init(conn)
-	cc.Read()
+	cc.Read(s.Router)
 
 	//msg := &Message{}
 	//msg.Parser(conn)
@@ -102,36 +104,20 @@ func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
 	return nil
 }
 
-var shutdownSignals = []os.Signal{os.Interrupt, os.Kill}
-
-func (s *Server) ExitHandle() {
-	//添加Ctrl+C的捕获处理
-	logger.Info("ExitHandle")
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, shutdownSignals...)
-	go func() {
-		<-c
-		logger.Info("Server closing ...")
-		go s.Stop()
-		<-c
-		<-c
-		<-c
-		logger.Warn("Force server shutdown ...")
-		os.Exit(1)
-	}()
-}
-
 func Panic2Error() (err error) {
 	//panic(-1)
 	return nil
 }
 
-func (s *Server) SetAuth(auth int) {
-	r.SetAuth(auth)
-}
+//func (s *Server) SetAuth(auth int) {
+//	r.SetAuth(auth)
+//}
 
-func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
-	r.AddRouter(apiId, handle)
+//func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
+//	r.AddRouter(apiId, handle)
+//}
+func (s *Server) AddRouter(apiId int32, handle *minterface.Function) {
+	s.Router.AddRouter(apiId, handle)
 }
 
 func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {

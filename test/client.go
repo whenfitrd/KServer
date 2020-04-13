@@ -21,7 +21,7 @@ type SliceMock struct {
 
 func main() {
 	//conn, err := net.Dial("tcp", "47.101.57.8:50000")
-	conn, err := net.Dial("tcp", "localhost:50000")
+	conn, err := net.Dial("tcp", "localhost:50010")
 	if err != nil {
 		fmt.Println("Error dialing", err.Error())
 		return

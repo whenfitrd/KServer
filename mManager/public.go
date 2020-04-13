@@ -9,13 +9,17 @@ import (
 var ini *utils.IniParser
 var logger *utils.Logger
 var ngm minterface.INetGroupManager
-var r minterface.IRouter
 var pm minterface.IPlayerManager
 
 func init() {
 	logger = utils.GetLogger()
 	ini = utils.GetIniParser()
 	ngm = mnet.GetNetGroupManager()
-	r = mnet.GetRouter()
 	pm = mnet.GetPlayerManager()
 }
+
+const (
+	MANAGER = "manager"
+	SINGLEMODULENUM = "singleModuleNum"
+	DEFAULTPORT = "DefaultPort"
+)

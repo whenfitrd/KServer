@@ -8,9 +8,9 @@ type ICConn interface {
 	//写
 	Write(data []byte)
 	//读
-	Read()
+	Read(router IRouter)
 	//处理数据
-	Handle()
+	Handle(router IRouter)
 	//关闭链接
 	Close()
 	//获取UUID

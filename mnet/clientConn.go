@@ -2,6 +2,7 @@ package mnet
 
 import (
 	"github.com/whenfitrd/KServer/global"
+	"github.com/whenfitrd/KServer/minterface"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
 	"sync"
@@ -32,8 +33,8 @@ func (cc *CConn) Write(data []byte) {
 	}
 }
 
-func (cc *CConn) Read() {
-	go cc.Handle()
+func (cc *CConn) Read(router minterface.IRouter) {
+	go cc.Handle(router)
 	for {
 		buf := make([]byte, 1024)
 		_, err := cc.TConn.Read(buf)
@@ -45,14 +46,14 @@ func (cc *CConn) Read() {
 	}
 }
 
-func (cc *CConn) Handle() {
+func (cc *CConn) Handle(router minterface.IRouter) {
 	defer utils.HandlePanic("clientConn")
 	for {
 		buf := <-cc.BufChan
 		buffer := buf
 		logger.Info("buffer len: ", len(buffer))
 		m := utils.UnPackMsg(buffer, &Message{})
-		r.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
+		router.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
 	}
 }
 

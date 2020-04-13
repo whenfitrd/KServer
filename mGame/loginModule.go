@@ -2,22 +2,23 @@ package mGame
 
 import (
 	"github.com/whenfitrd/KServer/minterface"
-	"github.com/whenfitrd/KServer/mnet"
 )
 
 type LoginModule struct {
 	Server minterface.IServer
 }
 
-func (loginM *LoginModule)Start() {
+func (loginM *LoginModule) Start(name, ip, port string) {
 	logger.Info("Start login module...")
-	s := mnet.ApplyServer()
-	loginM.Server = s
-	s.SConfig("loginServer","0.0.0.0", "51000")
-	s.Start()
+	loginM.Server.SConfig(name,ip, port)
+	loginM.Server.Start()
 }
 
-func (loginM *LoginModule)Stop() {
+func (loginM *LoginModule) Stop() {
 	logger.Info("Stop login module...")
-	loginM.Stop()
+	loginM.Server.Stop()
+}
+
+func (loginM *LoginModule) GetServer() minterface.IServer {
+	return loginM.Server
 }
