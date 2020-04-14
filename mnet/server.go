@@ -89,18 +89,21 @@ func (s *Server) AcceptConnect() {
 		conn, err := listener.AcceptTCP()
 		if err != nil {
 			if s.listenerCloseFlag {
-				logger.Info("[server] close lisener.")
+				logger.Info("Close lisener.")
 			} else {
 				logger.Error("Error accepting, err: " + err.Error())
 			}
-			return
+			break
 		}
 		go s.ConnectHandle(conn)
 	}
+	logger.Info("Wait for close connect")
 	s.wg.Wait()
+	logger.Info("Connect had been closed.")
 }
 
 func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
+	logger.Info("Connect handle")
 	s.wg.Add(1)
 	defer s.wg.Done()
 	//defer utils.HandlePanic()
@@ -149,8 +152,9 @@ func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {
 func (s *Server) closeGroup(groupName string) rStatus.RInfo {
 	group, sts := ngm.FindNetGroup(groupName)
 	if sts == rStatus.StatusOk {
-		for _, cconn := range group {
+		for k, cconn := range group {
 			cconn.Close()
+			delete(group, k)
 		}
 		return rStatus.StatusOk
 	} else {

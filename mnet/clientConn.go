@@ -14,6 +14,7 @@ type CConn struct {
 	BufChan chan []byte
 	UID string
 	Authorization int
+	connectCloseFlag bool
 }
 
 func (cc *CConn) Init(tc *net.TCPConn) {
@@ -21,6 +22,7 @@ func (cc *CConn) Init(tc *net.TCPConn) {
 	cc.TConn = tc
 	cc.BufChan = make(chan []byte, 16)
 	cc.Authorization = global.RVisitor
+	cc.connectCloseFlag = false
 }
 
 func (cc *CConn) Write(data []byte) {
@@ -39,8 +41,12 @@ func (cc *CConn) Read(router minterface.IRouter) {
 		buf := make([]byte, 1024)
 		_, err := cc.TConn.Read(buf)
 		if err != nil {
-			logger.Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
-			return
+			if cc.connectCloseFlag {
+				logger.Warn("Close connect ", cc.TConn.RemoteAddr().String())
+			} else {
+				logger.Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
+			}
+			break
 		}
 		cc.BufChan<- buf
 	}
@@ -62,6 +68,7 @@ func (cc *CConn) Handle(router minterface.IRouter) {
 }
 
 func (cc *CConn) Close() {
+	cc.connectCloseFlag = true
 	cc.TConn.Close()
 	for {
 		if len(cc.BufChan) == 0 {
