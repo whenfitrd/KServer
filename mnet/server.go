@@ -15,6 +15,7 @@ type Server struct {
 	Router minterface.IRouter
 	serverChan chan bool
 	wg sync.WaitGroup
+	listenerCloseFlag bool
 }
 
 func ApplyServer() *Server {
@@ -26,6 +27,7 @@ func ApplyServer() *Server {
 		Router: &Router{},
 		serverChan: make(chan bool),
 		wg: sync.WaitGroup{},
+		listenerCloseFlag: false,
 	}
 
 	s.Init()
@@ -54,7 +56,19 @@ func (s *Server) Start() {
 
 func (s *Server) Stop() {
 	logger.Info("Stop server...")
+	s.listenerCloseFlag = true
 	s.serverChan <- true
+}
+
+func (s *Server) close(listener *net.TCPListener) {
+	<-s.serverChan
+	logger.Warn("Stop listener ...")
+
+	s.closeGroup(s.Name)
+
+	if err := listener.Close(); err != nil {
+		logger.Error(err.Error())
+	}
 }
 
 func (s *Server) AcceptConnect() {
@@ -69,33 +83,33 @@ func (s *Server) AcceptConnect() {
 		return
 	}
 
-	go func() {
-		<-s.serverChan
-		logger.Warn("Stop listener ...")
-		if err = listener.Close(); err != nil {
-			logger.Error(err.Error())
-		}
-	}()
+	go s.close(listener)
 
 	for {
 		conn, err := listener.AcceptTCP()
 		if err != nil {
-			logger.Error("Error accepting, err: " + err.Error())
+			if s.listenerCloseFlag {
+				logger.Info("[server] close lisener.")
+			} else {
+				logger.Error("Error accepting, err: " + err.Error())
+			}
 			return
 		}
-		s.wg.Add(1)
 		go s.ConnectHandle(conn)
 	}
+	s.wg.Wait()
 }
 
 func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {
+	s.wg.Add(1)
 	defer s.wg.Done()
-	defer conn.Close()
 	//defer utils.HandlePanic()
 
 	//添加路由处理
 	cc := &CConn{}
 	cc.Init(conn)
+	logger.Info("add net group ", s.Name)
+	ngm.AddNetGroup(cc, s.Name)
 	cc.Read(s.Router)
 
 	//msg := &Message{}
@@ -125,6 +139,18 @@ func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {
 	if sts == rStatus.StatusOk {
 		for _, conns := range group {
 			conns.Write(data)
+		}
+		return rStatus.StatusOk
+	} else {
+		return rStatus.StatusError
+	}
+}
+
+func (s *Server) closeGroup(groupName string) rStatus.RInfo {
+	group, sts := ngm.FindNetGroup(groupName)
+	if sts == rStatus.StatusOk {
+		for _, cconn := range group {
+			cconn.Close()
 		}
 		return rStatus.StatusOk
 	} else {

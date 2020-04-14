@@ -28,7 +28,7 @@ func (cc *CConn) Write(data []byte) {
 	defer cc.Unlock()
 	_, err := cc.TConn.Write(data)
 	if err != nil {
-		utils.GetLogger().Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
+		logger.Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
 		return
 	}
 }
@@ -39,7 +39,7 @@ func (cc *CConn) Read(router minterface.IRouter) {
 		buf := make([]byte, 1024)
 		_, err := cc.TConn.Read(buf)
 		if err != nil {
-			utils.GetLogger().Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
+			logger.Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
 			return
 		}
 		cc.BufChan<- buf
@@ -47,18 +47,28 @@ func (cc *CConn) Read(router minterface.IRouter) {
 }
 
 func (cc *CConn) Handle(router minterface.IRouter) {
-	defer utils.HandlePanic("clientConn")
+	defer utils.HandlePanic("clientConn handle close.")
 	for {
-		buf := <-cc.BufChan
-		buffer := buf
-		logger.Info("buffer len: ", len(buffer))
-		m := utils.UnPackMsg(buffer, &Message{})
-		router.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
+		if buf, ok := <-cc.BufChan; ok {
+			buffer := buf
+			logger.Info("buffer len: ", len(buffer))
+			m := utils.UnPackMsg(buffer, &Message{})
+			router.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
+		} else {
+			logger.Warn("Close Handle channel.")
+			break
+		}
 	}
 }
 
 func (cc *CConn) Close() {
 	cc.TConn.Close()
+	for {
+		if len(cc.BufChan) == 0 {
+			close(cc.BufChan)
+			break
+		}
+	}
 }
 
 func (cc *CConn) GetUID() string {

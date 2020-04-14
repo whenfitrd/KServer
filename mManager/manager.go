@@ -168,7 +168,7 @@ func (m *Manager) CancelModule(moduleType int) {
 	//清空对应的白名单
 	delete(m.PortWhite, moduleType)
 	//初始化对应的起始端口号
-	m.NextPort[moduleType] = m.DefaultPort + moduleType * m.SingleModuleNum
+	m.NextPort[moduleType] = m.DefaultPort + moduleType * m.SingleModuleNum - 1
 	//关闭所有该种类的模块
 	for _, s := range m.ModuleMap[moduleType] {
 		s.Stop()
@@ -195,7 +195,7 @@ func (m *Manager) GetModuleByType(t int) map[int]minterface.IGameModule {
 	return moduleM
 }
 
-func (m *Manager) getUnusedPort(moduleType int) string {
+func (m *Manager) getUnusedPort(moduleType int) (returnPort string) {
 	//从白名单中获取port
 	for {
 		_, ok := m.PortWhite[moduleType]
@@ -211,13 +211,12 @@ func (m *Manager) getUnusedPort(moduleType int) string {
 		}
 		break
 	}
+	_, ok := m.NextPort[moduleType]
+	if !ok {
+		m.NextPort[moduleType] = m.DefaultPort + moduleType * m.SingleModuleNum - 1
+	}
 	for {
-		p, ok := m.NextPort[moduleType]
-		if !ok {
-			m.NextPort[moduleType] = m.DefaultPort + moduleType * m.SingleModuleNum
-		} else {
-			m.NextPort[moduleType] = p + 1
-		}
+		m.NextPort[moduleType] = m.NextPort[moduleType] + 1
 		if utils.CheckPortIsUsed(m.NextPort[moduleType]) {
 			continue
 		}

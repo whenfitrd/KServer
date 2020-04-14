@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/whenfitrd/KServer/utils"
 	"net"
+	"time"
 )
 
 type Test struct {
@@ -32,6 +33,7 @@ func main() {
 	m := utils.PackMsg(1, testStruct)
 
 	_, err = conn.Write(m)
+	time.Sleep(10*time.Second)
 	conn.Close()
 }
 
