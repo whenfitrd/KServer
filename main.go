@@ -15,7 +15,7 @@ type Test struct{
 
 func main() {
 	mgr := mManager.ApplyManager()
-	mgr.AddRouter(global.LoginModule, 1, test, global.RAll)
+	mgr.AddRouter(global.ServerBlock, 1, test, global.RAll)
 	mgr.Start()
 }
 

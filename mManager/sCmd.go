@@ -26,7 +26,7 @@ func (c *Cmd)RpcReplay(args *Args, reply *Reply) error {
 			switch args.Params[0] {
 			case "loginModule":
 				logger.Info("start loginModule")
-				go m.Register(global.LoginModule, "0.0.0.0")
+				go m.Register(global.ServerBlock, "0.0.0.0")
 				r.Message = fmt.Sprintf("Start a loginModule ...")
 			}
 		}
@@ -37,7 +37,7 @@ func (c *Cmd)RpcReplay(args *Args, reply *Reply) error {
 				go m.CancelAll()
 				r.Message = fmt.Sprintf("Stop all modules...")
 			case "loginModule":
-				go m.CancelModule(global.LoginModule)
+				go m.CancelModule(global.ServerBlock)
 				r.Message = fmt.Sprintf("Stop loginModules...")
 			}
 		} else if len(args.Params) >= 2 {
@@ -47,7 +47,7 @@ func (c *Cmd)RpcReplay(args *Args, reply *Reply) error {
 				if e != nil {
 					r.Message = "Error params after module."
 				}
-				go m.CancelPort(global.LoginModule, port)
+				go m.CancelPort(global.ServerBlock, port)
 				r.Message = fmt.Sprintf("Stop loginModules %d", port)
 			}
 		}
@@ -72,6 +72,6 @@ func (c *Cmd)RpcReplay(args *Args, reply *Reply) error {
 }
 
 var moduleMap = map[int]string{
-	global.LoginModule: "loginModule",
+	global.ServerBlock: "loginModule",
 }
 

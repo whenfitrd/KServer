@@ -16,8 +16,13 @@ type Message struct {
 }
 
 type MMsg struct {
+	//数据长度
 	Length   int32
+	//ApiId
 	MsgApiId int32
+	//Api类型-用于分配处理组件
+	MsgApiType int32
+	//2进制数据
 	MsgData  []byte
 }
 
@@ -73,18 +78,27 @@ func (msg *MMsg) GetApiId() int32 {
 	return msg.MsgApiId
 }
 
+func (msg *MMsg) GetApiType() int32 {
+	return msg.MsgApiType
+}
+
 func (msg *MMsg) GetData() []byte {
 	return msg.MsgData
 }
 
 func (msg *MMsg) ParserDataInfo(data []byte) {
+	//解析数据长度
 	lenBuf := data[:unsafe.Sizeof(msg.Length)]
 	msg.Length = int32(binary.BigEndian.Uint32(lenBuf))
 	logger.Info("End to read message length. " + strconv.Itoa(int(msg.Length)))
-
+	//解析MsgApiId
 	apiBuf := data[unsafe.Sizeof(msg.Length):unsafe.Sizeof(msg.Length)+unsafe.Sizeof(msg.MsgApiId)]
 	msg.MsgApiId = int32(binary.BigEndian.Uint32(apiBuf))
 	logger.Info("End to read message api id. " + strconv.Itoa(int(msg.MsgApiId)))
+	//解析MsgApiIdType
+	apiTpyeBuf := data[unsafe.Sizeof(msg.Length)+unsafe.Sizeof(msg.MsgApiId):unsafe.Sizeof(msg.Length)+unsafe.Sizeof(msg.MsgApiId)+unsafe.Sizeof(msg.MsgApiType)]
+	msg.MsgApiType = int32(binary.BigEndian.Uint32(apiTpyeBuf))
+	logger.Info("End to read message api id. " + strconv.Itoa(int(msg.MsgApiType)))
 }
 
 func (msg *MMsg) Parser(data []byte) {

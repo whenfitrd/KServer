@@ -22,7 +22,7 @@ func init() {
 
 func ApplyModule(moduleType int) minterface.IGameModule {
 	switch moduleType {
-	case global.LoginModule:
+	case global.ServerBlock:
 		return &LoginModule{
 			Server: mnet.ApplyServer(),
 		}

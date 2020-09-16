@@ -9,7 +9,7 @@ import (
 	"github.com/whenfitrd/KServer/minterface"
 )
 
-func PackMsg(apiId int, data interface{}) []byte {
+func PackMsg(apiId, apiType int, data interface{}) []byte {
 	d, err := json.Marshal(data)
 	if err != nil {
 		fmt.Println("To JSON ERR:", err)
@@ -22,9 +22,11 @@ func PackMsg(apiId int, data interface{}) []byte {
 
 	dataLen, _ := IntToBytes(int(len(d)), 4)
 	id, _ := IntToBytes(apiId, 4)
+	t, _ := IntToBytes(apiType, 4)
 
 	msg := append(msgHead, dataLen...)
 	msg = append(msg, id...)
+	msg = append(msg, t...)
 	msg = append(msg, d...)
 
 	return msg

@@ -6,7 +6,7 @@ const (
 
 const (
 	MyMsgLen = 9
-	MsgInfoLen = 8
+	MsgInfoLen = 16
 )
 
 const (
@@ -29,5 +29,5 @@ const (
 
 //模块
 const (
-	LoginModule = 1 + iota
+	ServerBlock = 1 + iota
 )
