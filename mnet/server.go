@@ -75,17 +75,8 @@ func (s *Server) Start() {
 }
 
 func (s *Server) Stop() {
-	s.LoggerClose()
+	logger.Stop()
 	os.Exit(1)
-}
-
-func (s *Server) LoggerClose() {
-	//关闭log
-	if logger.Closed {
-		return
-	}
-	logger.Close<- true
-	<-logger.Clear
 }
 
 func (s *Server) ConnectHandle(conn *net.TCPConn) (err error) {

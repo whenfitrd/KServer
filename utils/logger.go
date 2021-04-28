@@ -81,6 +81,14 @@ func (logger *Logger) RegisterCloseHandle() {
 	logger.Clear<- true
 }
 
+func (logger *Logger) Stop() {
+	if logger.Closed {
+		return
+	}
+	logger.Close<- true
+	<-logger.Clear
+}
+
 func (logger *Logger) PutMsg(msg *LogMsg) {
 	//把msg放入缓冲池里
 	if logger.Closed {

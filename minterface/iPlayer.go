@@ -22,6 +22,8 @@ type IPlayer interface {
 	AddToGroup(groupName string) rStatus.RInfo
 	//离开网络组
 	LeaveNetGroup(groupName string) rStatus.RInfo
+	//列出所属网络组名称和权限
+	ListNetGroup() (rStatus.RInfo, map[string]int)
 	//踢出网络组
 	KickOutPlayer(playerName, groupName string) rStatus.RInfo
 	//玩家退出
