@@ -1,4 +1,4 @@
-package main
+package csText
 
 import (
 	"bytes"

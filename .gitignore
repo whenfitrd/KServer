@@ -1,4 +1,5 @@
 main
 .idea
-test/client
-test/server
+csText/client
+csText/server
+.gitignore

@@ -53,8 +53,8 @@ func (logger *Logger) Init() {
 }
 
 func (logger *Logger) SetLogFile() {
-	if iniParser != nil {
-		filePath, rst := iniParser.GetValue("base", "logFile")
+	if cParser != nil {
+		filePath, rst := cParser.GetValue("base", "logFile")
 		if rst != rStatus.StatusOk {
 			filePath = "config.ini"
 		}
