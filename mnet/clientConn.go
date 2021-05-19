@@ -38,7 +38,7 @@ func (cc *CConn) Read() {
 		buf := make([]byte, 1024)
 		_, err := cc.TConn.Read(buf)
 		if err != nil {
-			utils.GetLogger().Error(cc.TConn.RemoteAddr().String(), " connection error: ", err)
+			utils.GetLogger().Error(cc.TConn.RemoteAddr().String(), " connection error: ", err.Error())
 			return
 		}
 		cc.BufChan<- buf
@@ -49,10 +49,8 @@ func (cc *CConn) Handle() {
 	defer utils.HandlePanic("clientConn")
 	for {
 		buf := <-cc.BufChan
-		buffer := buf
-		logger.Info("buffer len: ", len(buffer))
-		m := utils.UnPackMsg(buffer, &Message{})
-		r.Handle(cc, m.GetMsgInfo().GetApiId(), m.GetMsgInfo().GetData())
+		logger.Info("buffer len: ", len(buf))
+		r.Handle(cc, buf)
 	}
 }
 

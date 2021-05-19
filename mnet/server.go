@@ -21,7 +21,6 @@ func ApplyServer() *Server {
 		Ip:   "localhost",
 		Port: "50000",
 	}
-
 	return s
 }
 
@@ -41,6 +40,7 @@ func (s *Server) LoadIni(fileName string) rStatus.RInfo {
 }
 
 func (s *Server) Init() {
+	//EnvInit()
 	logger.Init()
 	s.LoadIni("config.ini")
 }
@@ -121,8 +121,14 @@ func (s *Server) SetAuth(auth int) {
 	r.SetAuth(auth)
 }
 
-func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc)  {
+func (s *Server) AddRouter(apiId int32, handle minterface.HandleFunc) {
 	r.AddRouter(apiId, handle)
+}
+
+func (s *Server) AddRouters(routers map[int32]minterface.HandleFunc) {
+	for k, v := range routers {
+		r.AddRouter(k, v)
+	}
 }
 
 func (s *Server) WriteToGroup(data []byte, groupName string) rStatus.RInfo {

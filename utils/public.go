@@ -7,6 +7,7 @@ import (
 
 
 func HandlePanic(info string) (err error) {
+	logger := GetLogger()
 	if r := recover(); r != nil {
 		logger.Info(info)
 		logger.Error("Recovered in Panic2Error")

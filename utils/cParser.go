@@ -15,10 +15,10 @@ type CParser struct {
 }
 
 var cParser *CParser
-var once sync.Once
+var onceParser sync.Once
 
 func GetConfigParser() *CParser {
-	once.Do(func() {
+	onceParser.Do(func() {
 		cParser = &CParser{
 			FileName: "",
 			IniMap: make(map[string]map[string]string),

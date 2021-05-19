@@ -1,23 +1,20 @@
-package csText
+package main
 
 import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"github.com/whenfitrd/KServer/utils"
+	"github.com/whenfitrd/KServer/pb"
 	"net"
+
+	"github.com/golang/protobuf/proto"
 )
 
-type Test struct {
-	Info string
-	L    int
-}
-
-type SliceMock struct {
-	addr uintptr
-	len  int
-	cap  int
-}
+//type SliceMock struct {
+//	addr uintptr
+//	len  int
+//	cap  int
+//}
 
 func main() {
 	//conn, err := net.Dial("tcp", "47.101.57.8:50000")
@@ -27,11 +24,22 @@ func main() {
 		return
 	}
 
-	testStruct := &Test{"test struct.", 10000}
+	head := &pb.MsgHead{
+		Id:     1,
+		Priority:   10,
+	}
 
-	m := utils.PackMsg(1, testStruct)
+	testStruct := &pb.Base{
+		Head: head,
+		Info: []byte("test"),
+	}
 
-	_, err = conn.Write(m)
+	buffer, _ := proto.Marshal(testStruct)
+	_, err = conn.Write(buffer)
+	//m := utils.PackMsg(1, testStruct)
+	//
+	//_, err = conn.Write(m)
+
 	conn.Close()
 }
 

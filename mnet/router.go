@@ -3,6 +3,7 @@ package mnet
 import (
 	"github.com/whenfitrd/KServer/global"
 	"github.com/whenfitrd/KServer/minterface"
+	"github.com/whenfitrd/KServer/msg"
 	"github.com/whenfitrd/KServer/rStatus"
 )
 
@@ -34,15 +35,18 @@ func (router *Router) AddRouter(apiId int32, handle minterface.HandleFunc) {
 	}
 }
 
-func (router *Router) Handle(cc minterface.ICConn, apiId int32, data []byte) rStatus.RInfo {
-	f, ok := router.HandleMap[int(apiId)]
+func (router *Router) Handle(cc minterface.ICConn, buf []byte) rStatus.RInfo {
+	msg := &msg.PBMsg{}
+	msg.Parser(buf)
+	f, ok := router.HandleMap[int(msg.GetApiId())]
 	if !ok {
 		logger.Error("Error apiId")
 		return rStatus.StatusError
 	}
+
 	//简单的接口权限检测
 	if CheckAuth(cc.GetAuth(), f.Auth) {
-		f.Func(cc, data)
+		f.Func(cc, msg.GetData())
 		return rStatus.StatusOk
 	}
 	return rStatus.ApiAuthError

@@ -15,7 +15,8 @@ type ILog interface {
 	string() string
 }
 
-var logger *Logger
+var myLogger *Logger
+var onceLogger sync.Once
 
 type Logger struct {
 	sync.Mutex
@@ -35,16 +36,16 @@ type LogMsg struct {
 }
 
 func GetLogger() *Logger {
-	if logger == nil {
-		logger = &Logger{
+	onceLogger.Do(func() {
+		myLogger = &Logger{
 			Name:    "logger",
 			MsgChan: make(chan *LogMsg, 256),
 			Close: make(chan bool),
 			Clear: make(chan bool),
 			Closed: false,
 		}
-	}
-	return logger
+	})
+	return myLogger
 }
 
 func (logger *Logger) Init() {

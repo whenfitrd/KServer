@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package="./;pb";
+
+message MsgHead {
+    int32 id=1;
+    int32 priority=2;
+}
+
+message Base{
+    MsgHead head=1;
+    bytes info=2;
+}

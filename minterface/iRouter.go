@@ -15,7 +15,7 @@ type IRouter interface {
 	//注册路由
 	AddRouter(apiId int32, handle HandleFunc)
 	//路由处理
-	Handle(cc ICConn, apiId int32, data []byte) rStatus.RInfo
+	Handle(cc ICConn, data []byte) rStatus.RInfo
 
 	GetHandleMap() map[int]*Function
 }
