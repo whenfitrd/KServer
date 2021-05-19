@@ -29,9 +29,15 @@ func main() {
 		Priority:   10,
 	}
 
+	info := &pb.Test{
+		Info: "test",
+	}
+
+	infobuf, _ := proto.Marshal(info)
+
 	testStruct := &pb.Base{
 		Head: head,
-		Info: []byte("test"),
+		Info: infobuf,
 	}
 
 	buffer, _ := proto.Marshal(testStruct)

@@ -20,12 +20,12 @@ func main() {
 }
 
 func test(cc minterface.ICConn, data []byte) {
-	var s pb.Base
+	var s pb.Test
 
 	fmt.Println(data)
 	proto.UnmarshalMerge(data, &s)
 
-	fmt.Println("=================test api======", s.Info, s.Head)
+	fmt.Println("=================test api======", s.Info)
 
 	//err:=json.Unmarshal([]byte(data), &s)
 	//if err!=nil{

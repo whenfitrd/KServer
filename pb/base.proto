@@ -11,3 +11,7 @@ message Base{
     MsgHead head=1;
     bytes info=2;
 }
+
+message Test{
+    string info=1;
+}
