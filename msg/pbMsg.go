@@ -8,6 +8,7 @@ import (
 type PBMsg struct {
 	MsgApiId int32
 	Priority int32
+	Length    int32
 	MsgData  []byte
 }
 
@@ -17,6 +18,10 @@ func (pbm *PBMsg) GetPriority() int32 {
 
 func (pbm *PBMsg) GetApiId() int32 {
 	return pbm.MsgApiId
+}
+
+func (pbm *PBMsg) GetLength() int32 {
+	return pbm.Length
 }
 
 func (pbm *PBMsg) GetData() []byte {
@@ -30,6 +35,7 @@ func (pbm *PBMsg) Parser(data []byte) {
 
 	pbm.MsgApiId = baseInfo.Head.Id
 	pbm.Priority = baseInfo.Head.Priority
+	pbm.Length = baseInfo.Head.Length
 	pbm.MsgData = baseInfo.Info
 }
 

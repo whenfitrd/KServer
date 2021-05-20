@@ -27,6 +27,7 @@ func main() {
 	head := &pb.MsgHead{
 		Id:     1,
 		Priority:   10,
+		Length: 4,
 	}
 
 	info := &pb.Test{
